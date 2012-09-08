@@ -29,6 +29,9 @@ set cursorline
 
 syntax on
 
+imap ii <Esc>
+imap II <Esc> 
+
 " The default leader is '\', but many people prefer ',' as it's in a standard
 "location
 let mapleader=','

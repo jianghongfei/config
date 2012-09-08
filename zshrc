@@ -27,4 +27,8 @@ alias grep='grep --color=auto'
 
 # end alias
 
+# variables
 
+export PSQL_EDITOR='vim +"set syntax=sql" '
+
+# end variables
