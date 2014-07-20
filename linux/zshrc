@@ -2,7 +2,7 @@
 
 autoload -Uz promptinit
 promptinit
-prompt walters
+prompt mine
 
 setopt histignorealldups sharehistory
 
@@ -13,11 +13,6 @@ bindkey -e
 HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
-
-# Use modern completion system
-autoload -Uz compinit
-compinit
-
 
 # alias
 

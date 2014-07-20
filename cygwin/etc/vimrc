@@ -1,4 +1,5 @@
 set nocompatible	" use vim defaults
+set backspace=2
 
 set history=100
 
@@ -23,14 +24,11 @@ set nobackup		" do not keep a backup file
 set number		" show line number
 set ignorecase		" ignore case when searching
 set whichwrap=b,s,h,l,<,>,[,]	" move freely between files
-
+set cc=80
 "set cursorcolumn
 set cursorline
 
 syntax on
-
-imap ii <Esc>
-imap II <Esc> 
 
 " The default leader is '\', but many people prefer ',' as it's in a standard
 "location

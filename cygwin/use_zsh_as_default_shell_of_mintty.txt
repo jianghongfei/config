@@ -1,0 +1,3 @@
+#to make zsh as default shell of mintty
+#change 'Target' parameter of its shortcut to:
+#E:\bin\cygwin\bin\mintty.exe -i /Cygwin-Terminal.ico /bin/zsh -l -i

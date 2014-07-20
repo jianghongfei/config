@@ -1,0 +1,10 @@
+vim
+zsh
+git
+mercurial
+python
+python3
+curl
+gcc-g++
+gdb
+make

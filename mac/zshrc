@@ -1,0 +1,8 @@
+if [[ "$TERM" != "dumb" ]]; then
+    export PROMPT='%B%F{red}%(?..[%?] )%f%b%F{green}%n@%m%f %F{yellow}%~%f
+%# '
+    export RPROMPT="%F{${1:-green}}%D %T%f"
+else
+    export PROMPT="%(?..[%?] )%n@%m:%~ %# "
+fi
+
