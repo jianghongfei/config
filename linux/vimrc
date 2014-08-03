@@ -5,8 +5,8 @@ autocmd BufNewFile,BufRead *.less   set filetype=less
 autocmd BufNewFile,BufRead *.ts     set filetype=typescript
 
 autocmd Filetype c		setlocal ts=8 sts=8 sw=8 noexpandtab
-autocmd Filetype html	setlocal ts=4 sts=4 sw=8 expandtab
-autocmd Filetype php	setlocal ts=4 sts=4 sw=8 expandtab
+autocmd Filetype html	setlocal ts=4 sts=4 sw=4 expandtab
+autocmd Filetype php	setlocal ts=4 sts=4 sw=4 expandtab
 
 set history=100
 
