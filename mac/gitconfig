@@ -1,0 +1,29 @@
+[user]
+	email = jiang.hongfei@gmail.com
+	name = Jiang Hongfei
+
+
+[alias]
+	history = log --all --graph --decorate --pretty=oneline --abbrev-commit
+	dt = difftool
+	mt = mergetool
+
+[diff]
+	tool = bcomp
+[difftool]
+  prompt = false
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+[merge]
+  tool = bcomp
+[mergetool]
+  prompt = false
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+[core]
+	excludesfile = ~/.gitignore
+	autocrlf = false
+[push]
+	default = simple

@@ -1,0 +1,26 @@
+[User]
+	email = "jiang.hongfei@gmail.com"
+	name = Jiang Hongfei
+
+[diff]
+    tool = bcomp
+[difftool]
+    prompt = false
+[difftool "bcomp"]
+    trustExitCode = true
+    cmd = "/usr/local/bin/bcomp" "$(cygpath -w $LOCAL)" "$REMOTE"
+
+[merge]
+    tool = bcomp
+[mergetool]
+	prompt = false
+[mergetool "bcomp"]
+    trustExitCode = true
+    cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+
+[alias]
+	history = log --all --graph --decorate --pretty=oneline --abbrev-commit
+	dt = difftool
+	mt = mergetool
+[core]
+	autocrlf = false
