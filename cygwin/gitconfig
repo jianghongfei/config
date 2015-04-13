@@ -1,26 +1,37 @@
+[core]
+	excludesfile = ~/.gitignore
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	autocrlf = false
+	editor = vim
+
 [User]
 	email = "jiang.hongfei@gmail.com"
 	name = Jiang Hongfei
 
 [diff]
-    tool = bcomp
+	tool = bcomp
 [difftool]
-    prompt = false
+	prompt = false
 [difftool "bcomp"]
-    trustExitCode = true
-    cmd = "/usr/local/bin/bcomp" "$(cygpath -w $LOCAL)" "$REMOTE"
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" "$(cygpath -w $LOCAL)" "$REMOTE"
 
 [merge]
-    tool = bcomp
+	tool = bcomp
 [mergetool]
 	prompt = false
 [mergetool "bcomp"]
-    trustExitCode = true
-    cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 
 [alias]
 	history = log --all --graph --decorate --pretty=oneline --abbrev-commit
 	dt = difftool
 	mt = mergetool
-[core]
-	autocrlf = false
+
+[push]
+	default = simple
