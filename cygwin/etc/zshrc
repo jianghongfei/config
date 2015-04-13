@@ -1,5 +1,0 @@
-alias ls='ls -F --color=auto' 
-alias ll='ls -lh'
-alias grep='grep --color=auto'
-alias reboot='shutdown -f -r -t 0'
-alias poweroff='shutdown -f -s -t 0'

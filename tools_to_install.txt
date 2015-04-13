@@ -1,3 +1,4 @@
+### tools
 vim
 zsh
 git
@@ -5,6 +6,16 @@ mercurial
 python
 python3
 curl
+wget
+gcc-core
 gcc-g++
 gdb
 make
+telnet    # inetutils for cygwin
+ncurses
+lsof
+build-essential
+zip
+tree
+
+### libs
