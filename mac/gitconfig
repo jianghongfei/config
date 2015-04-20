@@ -1,11 +1,7 @@
-[core]
-	excludesfile = ~/.gitignore
-	autocrlf = false
-	editor = vim
-
 [user]
 	email = jiang.hongfei@gmail.com
 	name = Jiang Hongfei
+
 
 [alias]
 	history = log --all --graph --decorate --pretty=oneline --abbrev-commit
@@ -15,18 +11,19 @@
 [diff]
 	tool = bcomp
 [difftool]
-	prompt = false
+  prompt = false
 [difftool "bcomp"]
-	trustExitCode = true
-	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
-
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
 [merge]
-	tool = bcomp
+  tool = bcomp
 [mergetool]
-	prompt = false
+  prompt = false
 [mergetool "bcomp"]
-	trustExitCode = true
-	cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
-
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+[core]
+	excludesfile = ~/.gitignore
+	autocrlf = input
 [push]
 	default = simple
