@@ -129,7 +129,6 @@ setopt PUSHD_IGNORE_DUPS
 
 # alias {{{
 
-alias ls='ls -G'
 alias ll='ls -lh'
 alias grep='grep --color=auto' 
 alias cls='clear'
