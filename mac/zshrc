@@ -142,3 +142,23 @@ alias st='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl '
 export PATH=/opt/local/bin:/opt/local/sbin:/Users/jianghongfei/Library/Developer/Xamarin/android-sdk-macosx/tools:/Users/jianghongfei/Library/Developer/Xamarin/android-sdk-macosx/platform-tools:/opt/local/share/java/apache-ant/bin:$PATH
 
 # }}} platform
+
+# functions {{{
+center () {
+	total=80
+	if [[ "$#@" -eq 0 ]]; then
+		echo ${(r:$total::-:)A}
+	else
+		(( count = (80 - $#1) / 2 - 1 ))
+		if [[ $count -gt 0 ]]; then
+			result=${(r:$count::-:)A}
+			result=$result" "$1" "$result
+
+			if [[ $#result -lt 80 ]]; then
+				result=$result"-"
+			fi
+			echo $result
+		fi
+	fi
+}
+# }}} functions

@@ -4,16 +4,16 @@ set nocompatible	" use vim defaults
 autocmd BufNewFile,BufRead *.less   set filetype=less
 autocmd BufNewFile,BufRead *.ts     set filetype=typescript
 
-autocmd Filetype c		setlocal ts=8 sts=8 sw=8 noexpandtab
-autocmd Filetype html	setlocal ts=4 sts=4 sw=4 expandtab
-autocmd Filetype php	setlocal ts=4 sts=4 sw=4 expandtab
+autocmd Filetype c,cpp                setlocal ai et ts=8 sw=8 sts=8
+autocmd Filetype html                 setlocal ai et ts=4 sw=4 sts=4
+autocmd Filetype php                  setlocal ai et ts=4 sw=4 sts=4
 
 set history=100
 
 set tabstop=4		" number of spaces of tab character
 set softtabstop=4	" let backspace delete indent
 set shiftwidth=4	" number of spaces to (auto)indent
-"set expandtab		" expand tabs to spaces
+set expandtab		" expand tabs to spaces
 
 "replace tabs exited to spaces
 ":retab
