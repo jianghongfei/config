@@ -4,7 +4,7 @@ set nocompatible	" use vim defaults
 autocmd BufNewFile,BufRead *.less   set filetype=less
 autocmd BufNewFile,BufRead *.ts     set filetype=typescript
 
-autocmd Filetype c,cpp                setlocal ai et ts=8 sw=8 sts=8
+autocmd Filetype c,cpp                setlocal ai noet ts=8 sw=8 sts=8
 autocmd Filetype html                 setlocal ai et ts=4 sw=4 sts=4
 autocmd Filetype php                  setlocal ai et ts=4 sw=4 sts=4
 
