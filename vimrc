@@ -1,4 +1,5 @@
-"colors twilight256
+"https://github.com/crusoexia/vim-monokai
+colors monokai
 set nocompatible	" use vim defaults
 
 autocmd BufNewFile,BufRead *.less   set filetype=less
