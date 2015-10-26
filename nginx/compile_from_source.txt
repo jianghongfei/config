@@ -12,3 +12,11 @@ apt-get install build-essential libpcre3 libpcre3-dev
     --group=www-data
 
 sudo make install
+
+wget https://raw.githubusercontent.com/jianghongfei/config/master/nginx/nginx
+
+sudo mv nginx /etc/init.d/
+
+sudo chmod a+x /etc/init.d/nginx
+
+sudo update-rc.d nginx defaults
