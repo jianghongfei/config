@@ -7,6 +7,12 @@
 	history = log --all --graph --decorate --pretty=oneline --abbrev-commit
 	dt = difftool
 	mt = mergetool
+    mark = "!f() {\
+                git add .; \
+                [[ -s .mignore ]] && git reset HEAD `cat .mignore`; \
+                git status; \
+            }; \
+            f"
 
 [diff]
 	tool = bcomp

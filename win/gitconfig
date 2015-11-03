@@ -7,6 +7,12 @@
 	history = log --all --graph --decorate --pretty=oneline --abbrev-commit
 	dt = difftool
 	mt = mergetool
+	mark = "!f() { \
+                git add .;\
+                [ -f .mignore ] && git reset HEAD `cat .mignore`;\
+                git status;\
+                }; \
+            f"
 
 [diff]
 	tool = bcomp
@@ -14,16 +20,15 @@
   prompt = false
 [difftool "bcomp"]
   trustExitCode = true
-  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE"
+  cmd = "bcomp" "$LOCAL" "$REMOTE"
 [merge]
   tool = bcomp
 [mergetool]
   prompt = false
 [mergetool "bcomp"]
   trustExitCode = true
-  cmd = "/usr/local/bin/bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+  cmd = "bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
 [core]
 	excludesfile = ~/.gitignore
-	autocrlf = false
 [push]
 	default = simple
