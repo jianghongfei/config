@@ -1,0 +1,1 @@
+sudo cp IBeam.tiff /Applications/Xcode.app/Contents/SharedFrameworks/DVTKit.framework/Resources/DVTIbeamCursor.tiff

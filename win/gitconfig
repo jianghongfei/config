@@ -5,11 +5,12 @@
 
 [alias]
 	history = log --all --graph --decorate --pretty=oneline --abbrev-commit
+	list = show --pretty="format:" --name-only
 	dt = difftool
 	mt = mergetool
 	mark = "!f() { \
                 git add .;\
-                [ -f .mignore ] && git reset HEAD `cat .mignore`;\
+                [ -s .mignore ] && git reset HEAD `cat .mignore`;\
                 git status;\
                 }; \
             f"
@@ -32,3 +33,9 @@
 	excludesfile = ~/.gitignore
 [push]
 	default = simple
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[credential]
+	helper = manager
