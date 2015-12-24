@@ -139,7 +139,7 @@ setopt PUSHD_IGNORE_DUPS
 
 # alias {{{
 
-alias ll='ls -lh'
+alias ll='ls -alh'
 alias grep='grep --color=auto' 
 alias cls='clear'
 
@@ -150,6 +150,7 @@ alias cls='clear'
 # }}} platform
 
 # functions {{{
+
 center () {
 	total=80
 	if [[ "$#@" -eq 0 ]]; then
@@ -167,4 +168,13 @@ center () {
 		fi
 	fi
 }
+
+function chpwd() {
+  if [ -r $PWD/.profile ]; then
+    source $PWD/.profile
+  else
+    source $HOME/.zshrc
+  fi
+}
+
 # }}} functions

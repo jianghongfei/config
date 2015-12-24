@@ -1,0 +1,14 @@
+alias cls='clear'
+alias ll='ls -la'
+
+export OLD_PATH=$PATH
+
+cd() { builtin cd "$@" && chpwd; }
+
+chpwd() {
+    if [[ -e .profile ]]; then
+        source .profile
+    else
+        export PATH=$OLD_PATH
+    fi
+}

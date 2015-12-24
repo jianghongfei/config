@@ -139,7 +139,7 @@ setopt PUSHD_IGNORE_DUPS
 
 # alias {{{
 
-alias ll='ls -lh'
+alias ll='ls -alh'
 alias grep='grep --color=auto' 
 alias cls='clear'
 
@@ -149,11 +149,11 @@ alias cls='clear'
 
 alias st='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl '
 
-export PATH=/opt/local/bin:/opt/local/sbin:/Users/jianghongfei/Library/Developer/Xamarin/android-sdk-macosx/tools:/Users/jianghongfei/Library/Developer/Xamarin/android-sdk-macosx/platform-tools:/opt/local/share/java/apache-ant/bin:$PATH
-
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # }}} platform
 
 # functions {{{
+
 center () {
 	total=80
 	if [[ "$#@" -eq 0 ]]; then
@@ -171,4 +171,13 @@ center () {
 		fi
 	fi
 }
+
+function chpwd() {
+  if [ -r $PWD/.profile ]; then
+    source $PWD/.profile
+  else
+    source $HOME/.zshrc
+  fi
+}
+
 # }}} functions
