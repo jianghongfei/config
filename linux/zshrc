@@ -1,10 +1,33 @@
-if [[ "$TERM" != "dumb" ]]; then
-    export PROMPT='%B%F{red}%(?..[%?] )%f%b%F{green}%n@%m%f %F{yellow}%~%f
-%# '
-    export RPROMPT="%F{${1:-green}}%D %T%f"
-else
-    export PROMPT="%(?..[%?] )%n@%m:%~ %# "
-fi
+function precmd {
+    local TERMWIDTH
+    (( TERMWIDTH = ${COLUMNS} - 1 ))
+    # (( TERMWIDTH = ${COLUMNS} ))
+    ###
+    # Truncate the path if it's too long.
+    
+    PR_FILLBAR=""
+    
+    local promptsize=${#${(%):-%(?..[%?] )%n@%m %~[%*]}}
+    
+    if [[ "$promptsize" -gt $TERMWIDTH ]]; then
+        (( PR_PWDLEN=$TERMWIDTH - $promptsize ))
+    else
+    PR_FILLBAR="\${(l.(( $TERMWIDTH - $promptsize )).. .)}"
+    fi
+}
+
+setprompt () {
+    ###
+    # Need this so the prompt will work.
+    setopt prompt_subst
+
+    ###
+    # Finally, the prompt.
+    PROMPT='%F{green}%n@%m%f %F{yellow}%~%f${(e)PR_FILLBAR}%F{green}[%*]%f
+%B%F{red}%(?..[%?] )%f%b%# '
+
+    RPROMPT='$(git_super_status)'
+}
 
 bindkey -e
 # CTRL + A           Move to the begnning of the line
@@ -169,12 +192,9 @@ center () {
 	fi
 }
 
-function chpwd() {
-  if [ -r $PWD/.profile ]; then
-    source $PWD/.profile
-  else
-    source $HOME/.zshrc
-  fi
-}
-
 # }}} functions
+
+source ~/autoenv.plugin.zsh
+source ~/zsh-git-prompt/zshrc.sh
+
+setprompt
