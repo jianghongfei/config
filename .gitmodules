@@ -1,0 +1,6 @@
+[submodule "linux/zsh-git-prompt"]
+	path = linux/zsh-git-prompt
+	url = git@github.com:jianghongfei/zsh-git-prompt.git
+[submodule "linux/autoenv"]
+	path = linux/autoenv
+	url = git@github.com:jianghongfei/autoenv.git

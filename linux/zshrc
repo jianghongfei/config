@@ -194,7 +194,7 @@ center () {
 
 # }}} functions
 
-source ~/autoenv.plugin.zsh
+source ~/autoenv/autoenv.sh
 source ~/zsh-git-prompt/zshrc.sh
 
 setprompt
