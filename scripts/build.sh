@@ -21,15 +21,15 @@ if [[ -e "$ROOT/source/.git" ]]; then
     cd "$ROOT/source"
     echo `pwd`
     
+    git clean -fdx
+    git reset --hard FETCH_HEAD
+
     # force pull to override everything, http://stackoverflow.com/a/9589927
     if [[ -v BRANCH ]]; then
     	git fetch origin $BRANCH
     else
     	git fetch origin master
     fi
-    
-    git reset --hard FETCH_HEAD
-    git clean -fd
 elif [[ -v BRANCH ]]; then
     git clone $URL --branch $BRANCH "$ROOT/source"
     cd $ROOT/source

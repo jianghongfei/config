@@ -1,5 +1,5 @@
 ----------------------------------- New Site -----------------------------------
-DECLARE @SiteID uniqueidentifier = '66666666-6666-6666-6666-666666666666';
+DECLARE @SiteID uniqueidentifier = '11111111-1111-1111-1111-111111111111';
 DECLARE @SiteName nvarchar(50) = N'Dummy Site';
 DECLARE @BinaryBase nvarchar(256) = N'd:\site'
 
@@ -7,11 +7,14 @@ INSERT INTO [Site] ([SiteID], [Name]) VALUES (@SiteID, @SiteName)
 INSERT [Option] ([OptionID], [Value]) VALUES (N'OPTION_SITE_ID', @SiteID)
 INSERT [Option] ([OptionID], [Value]) VALUES (N'OPTION_BINARY_BASE', @BinaryBase)
 INSERT [Option] ([OptionID], [Value]) VALUES (N'OPTION_IS_SITE', N'True')
-INSERT [DataSource] ([DataSourceID], [CollectionInterval], [DriverID], [IsActived], [Name], [SiteID], [Metadata]) VALUES ('88888888-8888-8888-8888-888888888888', NULL, N'98831f7b-1b87-4661-90ea-8fe37e4ce25f', 1, N'm9000', @SiteID, N'{"Port":5000}')
+INSERT [DataSource] ([DataSourceID], [CollectionInterval], [DriverID], [IsActived], [Name], [SiteID], [RecordingCount], [Metadata]) VALUES ('22222222-2222-2222-2222-222222222222', NULL, N'98831f7b-1b87-4661-90ea-8fe37e4ce25f', 1, N'm9000', @SiteID, 0, N'{"Port":5000}')
+INSERT [DataSource] ([DataSourceID], [CollectionInterval], [DriverID], [IsActived], [Name], [SiteID], [RecordingCount], [Metadata]) VALUES ('33333333-3333-3333-3333-333333333333', NULL, N'82e6c4a0-a6fd-486a-b547-2c1532281dc7', 1, N'TCM', @SiteID, 0, N'{"Port":5000}')
 
-INSERT [ReplicationTarget] ([ReplicationTargetID], [Approvedness], [Desc], [FromTime], [IP], [IsInitiative], [LastSuccessReplicationTime], [Name], [Port], [SiteID], [UploadInterval], [Metadata])
-VALUES (N'96037584-dc18-465d-8c78-ec1ff7ff46e8', 0, NULL, CAST(N'2016-04-12 00:00:00.0000000' AS DateTime2), N'192.168.1.100', 0, NULL, N'ToHQ', 4096, N'ed824d72-d77a-4ee5-8fd9-04927a7a3ebc', 10, NULL)
+INSERT [ReplicationTarget] ([ReplicationTargetID], [Approvedness], [Desc], [FromTime], [IP], [IsInitiative], [LastSuccessReplicationTime], [Name], [Port], [SiteID], [UploadInterval], [RecordingCount], [IsDisabled], [Metadata])
+VALUES (N'44444444-4444-4444-4444-444444444444', 0, NULL, CAST(N'2016-04-12 00:00:00.0000000' AS DateTime2), N'192.168.100.2', 0, NULL, N'ToHQ1', 4096, @SiteID, 10, 0, 0, NULL)
 
+INSERT [ReplicationTarget] ([ReplicationTargetID], [Approvedness], [Desc], [FromTime], [IP], [IsInitiative], [LastSuccessReplicationTime], [Name], [Port], [SiteID], [UploadInterval], [RecordingCount], [IsDisabled], [Metadata])
+VALUES (N'55555555-5555-5555-5555-555555555555', 0, NULL, CAST(N'2016-04-12 00:00:00.0000000' AS DateTime2), N'192.168.100.3', 0, NULL, N'ToHQ2', 4096, @SiteID, 10, 0, 0, NULL)
 
 ------------------------------------ New HQ ------------------------------------
 DECLARE @BinaryBase nvarchar(256) = N'd:\hq'
@@ -21,8 +24,8 @@ INSERT [Option] ([OptionID], [Value]) VALUES (N'OPTION_BINARY_BASE', @BinaryBase
 INSERT [Option] ([OptionID], [Value]) VALUES (N'OPTION_IS_SITE', N'False')
 INSERT [Option] ([OptionID], [Value]) VALUES (N'OPTION_RECEIVER_WEB_PORT', @Port)
 
-INSERT [ReplicationTarget] ([ReplicationTargetID], [Approvedness], [Desc], [FromTime], [IP], [IsInitiative], [LastSuccessReplicationTime], [Name], [Port], [SiteID], [UploadInterval], [Metadata]) 
-VALUES (N'96037584-dc18-465d-8c78-ec1ff7ff46e8', 1, NULL, NULL, NULL, 0, NULL, N'Dummy Site', 0, N'ed824d72-d77a-4ee5-8fd9-04927a7a3ebc', 0, NULL)
+INSERT [ReplicationTarget] ([ReplicationTargetID], [Approvedness], [Desc], [FromTime], [IP], [IsInitiative], [LastSuccessReplicationTime], [Name], [Port], [SiteID], [UploadInterval], [IsDisabled], [RecordingCount], [Metadata]) 
+VALUES (N'11111111-1111-1111-1111-111111111111', 1, NULL, NULL, NULL, 0, NULL, N'Dummy Site', 0, N'66666666-6666-6666-6666-666666666666', 0, 0, 0, NULL)
 
 ------------------------- Change SiteID --------------------------
 DECLARE @SiteID uniqueidentifier = '66666666-6666-6666-6666-666666666666'
@@ -253,7 +256,53 @@ SQLCMD -S .\sqlexpress -d MDataPort_taohuashan -Q "SELECT 'D:\Data_TaoHuaShan\Re
 '
 
 
+SELECT m.[Name], ISNULL(t.NUMBER, 0)
+FROM [Machine] m
+  LEFT JOIN (
+    SELECT s.[MachineID], COUNT(*) AS NUMBER
+    FROM [Recording] r
+    LEFT JOIN [Measurement] meas ON meas.[MeasurementID] = r.[MeasurementID]
+    LEFT JOIN [Sensor] s ON s.[SensorID] = meas.[SensorID]
+    GROUP BY s.[MachineID]
+  ) AS t on t.[MachineID] = m.[MachineID]
+ORDER BY m.[Name]
 
+
+SELECT m.[Name], s.[Name], ISNULL(t.NUMBER, 0)
+FROM [Sensor] s
+  LEFT JOIN [Machine] m on m.[MachineID] = s.[MachineID]
+  LEFT JOIN (
+    SELECT meas.[SensorID], COUNT(*) AS NUMBER
+    FROM [Recording] r
+    LEFT JOIN [Measurement] meas ON meas.[MeasurementID] = r.[MeasurementID]
+    GROUP BY meas.[SensorID]
+  ) AS t on t.[sensorid] = s.[sensorid]
+ORDER BY m.[Name], s.[Name]
+
+
+SELECT m.[Name], s.[Name], meas.[Name], ISNULL(t.NUMBER, 0)
+FROM [Measurement] meas 
+  LEFT JOIN [Sensor] s on s.[SensorID] = meas.[SensorID]
+  LEFT JOIN [Machine] m on m.[MachineID] = s.[MachineID]
+  LEFT JOIN (
+    SELECT meas.[MeasurementID], COUNT(*) AS NUMBER
+    FROM [Recording] r
+    LEFT JOIN [Measurement] meas ON meas.[MeasurementID] = r.[MeasurementID]
+    GROUP BY meas.[MeasurementID]
+  ) AS t on t.[MeasurementID] = meas.[MeasurementID]
+ORDER BY m.[Name], s.[Name], meas.[Name]
+
+
+SELECT [MeasurementID], [timestamp], cast([timestamp] as date), substring(CONVERT(VARCHAR(8), [timestamp], 108), 1, 2)
+      ,[AlarmStatus]
+      ,[BiasVoltage]
+      ,[Overall]
+      ,[RPM]
+      ,[YValue]
+      ,[Metadata]
+  FROM [dbo].[Recording]
+where [Count] = 1
+order by [MeasurementID], cast([timestamp] as date), substring(CONVERT(VARCHAR(8), [timestamp], 108), 1, 2)
 
 
 

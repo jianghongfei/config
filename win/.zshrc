@@ -26,7 +26,7 @@ setprompt () {
     PROMPT='%F{green}%n@%m%f %F{yellow}%~%f${(e)PR_FILLBAR}%F{green}[%*]%f
 %B%F{red}%(?..[%?] )%f%b%# '
 
-    RPROMPT='$(git_super_status)'
+    RPROMPT='$(__git_ps1)'
 }
 
 bindkey -e
@@ -170,9 +170,6 @@ alias cls='clear'
 
 # platform {{{
 
-alias st='/Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl '
-
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 # }}} platform
 
 # functions {{{
@@ -197,5 +194,12 @@ center () {
 
 # }}} functions
 
-source ~/zsh-git-prompt/zshrc.sh
+# source ~/zsh-git-prompt/zshrc.sh
+source ~/.git-prompt.sh
+
 setprompt
+
+export PATH="$PATH:/mnt/c/Program\ Files/Docker/Docker/resources/bin"
+alias start='cmd.exe /c start'
+alias docker=docker.exe
+alias docker-compose=docker-compose.exe

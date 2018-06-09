@@ -1,0 +1,41 @@
+[user]
+	email = jiang.hongfei@gmail.com
+	name = Jiang Hongfei
+
+
+[alias]
+	history = log --all --graph --pretty=format:'%C(auto)%h %C(dim green)%ad%C(auto)%d %s %C(dim red)(%aN)' --date=format:%m%d%H
+	list = show --pretty="format:" --name-only
+	dt = difftool
+	mt = mergetool
+	mark = "!f() { \
+                git add .;\
+                [ -s .mignore ] && git reset HEAD `cat .mignore`;\
+                git status;\
+                }; \
+            f"
+
+[diff]
+	tool = bcomp
+[difftool]
+  prompt = false
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = "bcomp" "$LOCAL" "$REMOTE"
+[merge]
+  tool = bcomp
+[mergetool]
+  prompt = false
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = "bcomp" "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+[core]
+	excludesfile = ~/.gitignore
+[push]
+	default = simple
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[credential]
+	helper = manager
