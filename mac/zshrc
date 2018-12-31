@@ -8,11 +8,16 @@ function precmd {
     PR_FILLBAR=""
     
     local promptsize=${#${(%):-%(?..[%?] )%n@%m %~[%*]}}
+
+    if [ ! -z ${VIRTUAL_ENV+x} ]; then
+        local myvar="(`basename \"$VIRTUAL_ENV\"`) ";
+        ((promptsize = $promptsize + ${#myvar}))
+    fi
     
     if [[ "$promptsize" -gt $TERMWIDTH ]]; then
         (( PR_PWDLEN=$TERMWIDTH - $promptsize ))
     else
-    PR_FILLBAR="\${(l.(( $TERMWIDTH - $promptsize )).. .)}"
+        PR_FILLBAR="\${(l.(( $TERMWIDTH - $promptsize )).. .)}"
     fi
 }
 
@@ -41,8 +46,7 @@ bindkey -e
 
 # ls color scheme {{{
 
-LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43";
-LSCOLORS="exfxcxdxbxegedabagacad";
+LS_COLORS="di=36:ln=1;31:so=37:pi=1;33:ex=35:bd=37:cd=37:su=37:sg=37:tw=32:ow=32";
 
 # Do we need Linux or BSD Style?
 if ls --color -d . &>/dev/null 2>&1
@@ -51,8 +55,7 @@ then
     export LS_COLORS=$LS_COLORS
     alias ls='ls --color=tty'
 else
-    # BSD Style
-    export LSCOLORS=$LSCOLORS
+    export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
     alias ls='ls -G'
 fi
 # }}} color scheme
@@ -60,22 +63,119 @@ fi
 # Miscellaneous {{{
 #允许在交互模式中使用注释
 set -o INTERACTIVE_COMMENTS
-
-#编辑器
 export EDITOR=vim
 
 # }}} Miscellaneous
 
+# Auto-complete {{{
+setopt AUTO_LIST
+setopt AUTO_MENU
+setopt MENU_COMPLETE #开启此选项，补全时会直接选中菜单项
+
+# Use modern completion system
+autoload -Uz compinit
+compinit
+
+# 自动补全缓存
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion::complete:*' cache-path .zcache
+zstyle ':completion:*:cd:*' ignore-parents parent pwd
+
+# 自动补全选项
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' menu select
+zstyle ':completion:*:*:default' force-list always
+zstyle ':completion:*' select-prompt '%SSelect:  lines: %L  matches: %M  [%p]'
+
+zstyle ':completion:*:match:*' original only
+zstyle ':completion::prefix-1:*' completer _complete
+zstyle ':completion:predict:*' completer _complete
+zstyle ':completion:incremental:*' completer _complete _correct
+zstyle ':completion:*' completer _complete _prefix _correct _prefix _match _approximate
+
+# 路径补全
+zstyle ':completion:*' expand 'yes'
+zstyle ':completion:*' squeeze-shlashes 'yes'
+zstyle ':completion::complete:*' '\\'
+
+zstyle ':completion:*:*:*:default' menu yes select
+zstyle ':completion:*:*:default' force-list always
+
+# 彩色补全菜单
+# GNU Colors 需要/etc/DIR_COLORS文件 否则自动补全时候选菜单中的选项不能彩色显示
+[ -f /etc/DIR_COLORS ] && eval $(dircolors -b /etc/DIR_COLORS)
+export ZLSCOLORS="${LS_COLORS}"
+zmodload zsh/complist
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+
+#修正大小写
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+
+#错误校正
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+zstyle ':completion:*:approximate:*' max-errors 1 numeric
+
+#kill 命令补全
+compdef pkill=kill
+compdef pkill=killall
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:*:*:*:processes' force-list always
+zstyle ':completion:*:processes' command 'ps -au$USER'
+
+#补全类型提示分组
+zstyle ':completion:*:matches' group 'yes'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:descriptions' format $'\e[01;33m -- %d --\e[0m'
+zstyle ':completion:*:messages' format $'\e[01;35m -- %d --\e[0m'
+zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found --\e[0m'
+zstyle ':completion:*:corrections' format $'\e[01;32m -- %d (errors: %e) --\e[0m'
+
+# cd ~ 补全顺序
+zstyle ':completion:*:-tilde-:*' group-order 'named-directories' 'path-directories' 'users' 'expand'
+#}}}
+
+#关于历史纪录的配置 {{{
+#历史纪录条目数量
+export HISTSIZE=10000
+#注销后保存的历史纪录条目数量
+export SAVEHIST=10000
+#历史纪录文件
+export HISTFILE=~/.zhistory
+#以附加的方式写入历史纪录
+setopt INC_APPEND_HISTORY
+#如果连续输入的命令相同，历史纪录中只保留一个
+setopt HIST_IGNORE_DUPS
+#为历史纪录中的命令添加时间戳
+setopt EXTENDED_HISTORY      
+ 
+#启用 cd 命令的历史纪录，cd -[TAB]进入历史路径
+setopt AUTO_PUSHD
+#相同的历史路径只保留一个
+setopt PUSHD_IGNORE_DUPS
+ 
+#在命令前添加空格，不将此命令添加到纪录文件中
+#setopt HIST_IGNORE_SPACE
+#}}}
 
 # alias {{{
 
-alias poweroff='shutdown -h now'
-alias reboot='shutdown -r now'
-
+alias poweroff='sudo shutdown -h now'
+alias reboot='sudo shutdown -r now'
+alias ..='cd ..'
+alias .2='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
 alias ll='ls -alh'
 alias grep='grep --color=auto' 
 alias cls='clear'
-
+alias size='f(){ du -sh $1* | sort -hr; }; f'
+alias now='date "+%Y-%m-%d %H:%M:%S"'
+alias www='python3 -m http.server'
 # }}} alias
 
 # platform {{{
@@ -108,4 +208,3 @@ mcd() { command mkdir -p "$@" && cd "$@"; }
 
 source ~/zsh-git-prompt/zshrc.sh
 setprompt
-fpath=(path/to/zsh-completions/src $fpath)
