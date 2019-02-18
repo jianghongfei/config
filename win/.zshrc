@@ -8,6 +8,11 @@ function precmd {
     PR_FILLBAR=""
     
     local promptsize=${#${(%):-%(?..[%?] )%n@%m %~[%*]}}
+
+    if [ ! -z ${VIRTUAL_ENV+x} ]; then
+        local myvar="(`basename \"$VIRTUAL_ENV\"`) ";
+        ((promptsize = $promptsize + ${#myvar}))
+    fi
     
     if [[ "$promptsize" -gt $TERMWIDTH ]]; then
         (( PR_PWDLEN=$TERMWIDTH - $promptsize ))
@@ -26,7 +31,7 @@ setprompt () {
     PROMPT='%F{green}%n@%m%f %F{yellow}%~%f${(e)PR_FILLBAR}%F{green}[%*]%f
 %B%F{red}%(?..[%?] )%f%b%# '
 
-    RPROMPT='$(__git_ps1)'
+    RPROMPT='$(git_super_status)'
 }
 
 bindkey -e
@@ -41,8 +46,7 @@ bindkey -e
 
 # ls color scheme {{{
 
-LS_COLORS="di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32";
-LSCOLORS="ExGxFxDxCxDxDxhbhdacEc";
+LS_COLORS="di=36:ln=1;31:so=37:pi=1;33:ex=35:bd=37:cd=37:su=37:sg=37:tw=32:ow=32";
 
 # Do we need Linux or BSD Style?
 if ls --color -d . &>/dev/null 2>&1
@@ -51,8 +55,7 @@ then
     export LS_COLORS=$LS_COLORS
     alias ls='ls --color=tty'
 else
-    # BSD Style
-    export LSCOLORS=$LSCOLORS
+    export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
     alias ls='ls -G'
 fi
 # }}} color scheme
@@ -60,13 +63,11 @@ fi
 # Miscellaneous {{{
 #允许在交互模式中使用注释
 set -o INTERACTIVE_COMMENTS
-
-#编辑器
 export EDITOR=vim
 
 # }}} Miscellaneous
 
-# 自动补全功能 {{{
+# Auto-complete {{{
 setopt AUTO_LIST
 setopt AUTO_MENU
 setopt MENU_COMPLETE #开启此选项，补全时会直接选中菜单项
@@ -162,10 +163,18 @@ setopt PUSHD_IGNORE_DUPS
 
 # alias {{{
 
+alias poweroff='sudo shutdown -h now'
+alias reboot='sudo shutdown -r now'
+alias ..='cd ..'
+alias .2='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
 alias ll='ls -alh'
 alias grep='grep --color=auto' 
 alias cls='clear'
 
+alias now='date "+%Y-%m-%d %H:%M:%S"'
 # }}} alias
 
 # platform {{{
@@ -192,14 +201,11 @@ center () {
 	fi
 }
 
-# }}} functions
+mcd() { command mkdir -p "$@" && cd "$@"; }
 
-# source ~/zsh-git-prompt/zshrc.sh
-source ~/.git-prompt.sh
+# }}} functions
+export GIT_PROMPT_EXECUTABLE="haskell"
+#source ~/autoenv/autoenv.sh
+source ~/zsh-git-prompt/zshrc.sh
 
 setprompt
-
-export PATH="$PATH:/mnt/c/Program\ Files/Docker/Docker/resources/bin"
-alias start='cmd.exe /c start'
-alias docker=docker.exe
-alias docker-compose=docker-compose.exe
